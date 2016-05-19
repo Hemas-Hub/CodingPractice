@@ -1,3 +1,7 @@
+
+/**
+ * Created by hema on 5/16/16.
+ */
 public class Queue {
     LinkedList linkedList = new LinkedList();
 
@@ -6,20 +10,26 @@ public class Queue {
     }
 
     public void remove(){
-        linkedList.deleteLast();
+        linkedList.deleteFirst();
     }
 
     public int getValue(int pos){
         return linkedList.getValue(pos);
     }
 
-    public static void main(String arg[]){
-        Queue queue = new Queue();
-        queue.add(2);
-        queue.add(4);
-        queue.add(6);
-        queue.remove();
-        queue.add(8);
-        System.out.println(queue.getValue(2));
+    public int peek(){
+        return linkedList.getHead();
+    }
+
+    public int size(){
+        return linkedList.size();
+    }
+
+    public boolean isEmpty(){
+        return linkedList.isEmpty();
+    }
+
+    public void printQueue(){
+        linkedList.printList();
     }
 }
