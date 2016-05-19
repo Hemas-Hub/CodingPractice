@@ -11,11 +11,7 @@ class Node{
     }
 }
 public class LinkedList {
-    Node head;
-
-    LinkedList(Node head){
-        this.head = head;
-    }
+    Node head = new Node();
 
 
     public void insertStart(int value){
@@ -36,25 +32,34 @@ public class LinkedList {
         Node newNode = new Node();
         newNode.value = value;
         newNode.next = null;
-        Node current = new Node();
-        current = head;
-        while(current != null){
-            if(current.next != null)
-                current = current.next;
-            else
-                break;
+        if(head.value == Integer.MIN_VALUE){
+            head = new Node();
+            head.value = value;
+            head.next = null;
         }
-        current.next = newNode;
+        else{
+            Node current = new Node();
+            current = head;
+            while(current != null){
+                if(current.next != null)
+                    current = current.next;
+                else
+                    break;
+            }
+            current.next = newNode;
+        }
     }
+
 
 
     public void insert(int value, int pos){
         Node newNode = new Node();
         newNode.value = value;
+        int listSize = size();
         if(pos-1 == 0){
             insertStart(value);
         }
-        else if(pos-1 > 0){
+        else if(pos-1 < listSize){
             //insert at a particular position in middle
             int i = 1;
             Node current = new Node();
@@ -123,12 +128,11 @@ public class LinkedList {
             current = current.next;
             i++;
         }
-        if(i == 1){
+        if(pos == 1){
             //deleting head node
             head = current.next;
         }
         else {
-            i--;
             if(current.next.next != null) {
                 //deleting from middle of list
                 current.next = current.next.next;
@@ -141,17 +145,63 @@ public class LinkedList {
         }
     }
 
+    public int getHead(){
+        if(head!= null)
+            return head.value;
+        else return Integer.MIN_VALUE;
+    }
+
+    public int getLastValue(){
+        Node current = new Node();
+        current = head;
+        while(current != null){
+            if(current.next != null){
+                current = current.next;
+            }
+            else{
+                break;
+            }
+        }
+        return current.value;
+
+    }
     public int getValue(int pos){
         int i = 1;
         Node current = new Node();
         current = head;
-        while(i<pos-1){
-            current = current.next;
-            i++;
+        if(pos-1 >= size()){
+            System.out.println("Position mentioned is outside of the list");
+            return 0;
         }
-        System.out.println("Value in location "+pos+" is "+current.next.value);
+        else{
+            while(i<pos-1){
+                current = current.next;
+                i++;
+            }
+            System.out.println("Value in location "+pos+" is "+current.next.value);
+            return current.next.value;
+        }
 
-        return current.next.value;
+    }
+
+    public boolean isEmpty(){
+        if(head.value == Integer.MIN_VALUE){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public int size(){
+        int count = 0;
+        Node current = new Node();
+        current = head;
+        while(current != null){
+            count ++;
+            current = current.next;
+        }
+        return count;
     }
 
     public void printList(){
