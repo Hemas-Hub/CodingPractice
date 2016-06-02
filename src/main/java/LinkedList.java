@@ -1,3 +1,6 @@
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 /**
  * Created by hema on 5/12/16.
  */
@@ -10,9 +13,12 @@ class Node{
         next = null;
     }
 }
-public class LinkedList {
-    Node head = new Node();
 
+public class LinkedList implements Iterable{
+
+    Node head = new Node();
+    Node node = head;
+    Node previousNode, lastReturnedNode;
 
     public void insertStart(int value){
         if(head.value == Integer.MIN_VALUE){
@@ -39,7 +45,7 @@ public class LinkedList {
         }
         else{
             Node current = new Node();
-            current = head;
+            node = current = head;
             while(current != null){
                 if(current.next != null)
                     current = current.next;
@@ -49,7 +55,6 @@ public class LinkedList {
             current.next = newNode;
         }
     }
-
 
 
     public void insert(int value, int pos){
@@ -63,7 +68,7 @@ public class LinkedList {
             //insert at a particular position in middle
             int i = 1;
             Node current = new Node();
-            current = head;
+            node = current = head;
             while(i < pos-1){
                 current = current.next;
                 i++;
@@ -74,7 +79,7 @@ public class LinkedList {
         else{
             //insert at the end
             Node current = new Node();
-            current = head;
+            node = current = head;
             int i= 0;
             while(current != null){
                 if(current.next != null){
@@ -98,13 +103,13 @@ public class LinkedList {
 
     public void deleteFirst(){
         Node current = new Node();
-        current = head;
+        node = current = head;
         head = current.next;
     }
 
     public void deleteLast(){
         Node current = new Node();
-        current = head;
+        node = current = head;
         if(current.next != null){
             while(current != null){
                 if(current.next.next != null)
@@ -123,7 +128,7 @@ public class LinkedList {
     public void delete(int pos){
         int i = 1;
         Node current = new Node();
-        current = head;
+        node = current = head;
         while(i < pos-1){
             current = current.next;
             i++;
@@ -153,7 +158,7 @@ public class LinkedList {
 
     public int getLastValue(){
         Node current = new Node();
-        current = head;
+        node = current = head;
         while(current != null){
             if(current.next != null){
                 current = current.next;
@@ -168,7 +173,7 @@ public class LinkedList {
     public int getValue(int pos){
         int i = 1;
         Node current = new Node();
-        current = head;
+        node = current = head;
         if(pos-1 >= size()){
             System.out.println("Position mentioned is outside of the list");
             return 0;
@@ -196,7 +201,7 @@ public class LinkedList {
     public int size(){
         int count = 0;
         Node current = new Node();
-        current = head;
+        node = current = head;
         while(current != null){
             count ++;
             current = current.next;
@@ -207,7 +212,7 @@ public class LinkedList {
     public void printList(){
         if(head != null){
             Node current = new Node();
-            current = head;
+            node = current = head;
             while(current != null){
                 System.out.print(current.value +"\t");
                 current = current.next;
@@ -219,4 +224,38 @@ public class LinkedList {
 
 
     }
+
+    //Iterator implementation
+    public Iterator iterator() {
+        Iterator it = new Iterator() {
+
+            @Override
+            public boolean hasNext() {
+                if(node != null)
+                    return true;
+                else
+                    return false;
+            }
+
+            @Override
+            public Object next() {
+                if (!this.hasNext ())
+                    throw new NoSuchElementException (
+                            "end of the iteration");
+
+                previousNode = lastReturnedNode;
+                lastReturnedNode = node;
+                node = node.next;
+
+                return lastReturnedNode;
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+        return it;
+    }
+
 }
